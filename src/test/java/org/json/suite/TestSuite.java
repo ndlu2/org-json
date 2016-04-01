@@ -1,7 +1,9 @@
 package org.json.suite;
 
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -315,6 +317,10 @@ public class TestSuite extends TestCase
     {
         final Obj obj = new Obj("A beany object", 42, true);
         final JSONStringer jj = new JSONStringer();
+        final String[] names = JSONObject.getNames(obj);
+
+        final List<String> expected = Arrays.asList("aString", "aNumber", "aBoolean");
+        Assert.assertTrue(Arrays.asList(names).containsAll(expected));
 
         final String s = jj
         .object()
@@ -332,11 +338,11 @@ public class TestSuite extends TestCase
         .endObject()
         .endArray()
         .key("obj keys")
-        .value(JSONObject.getNames(obj))
+        .value(names)
         .endObject()
         .toString();
 
-        final String c = "{\"single\":\"MARIE HAA'S\",\"Johnny\":\"MARIE HAA\\\\'S\",\"foo\":\"bar\",\"baz\":[{\"quux\":\"Thanks, Josh!\"}],\"obj keys\":[\"aString\",\"aNumber\",\"aBoolean\"]}";
+        final String c = "{\"single\":\"MARIE HAA'S\",\"Johnny\":\"MARIE HAA\\\\'S\",\"foo\":\"bar\",\"baz\":[{\"quux\":\"Thanks, Josh!\"}],\"obj keys\":[\"" + names[0] + "\",\"" + names[1] + "\",\"" + names[2] + "\"]}";
 
         Assert.assertEquals(s, c);
     }
